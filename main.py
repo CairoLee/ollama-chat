@@ -62,62 +62,67 @@ with gr.Blocks(title="Ollama Chat") as demo:
             </center>
         </div>"""
         )
+
     with gr.Row():
         with gr.Column(scale=1):
-            base_url = gr.Textbox(
-                label="Base URL",
-                placeholder="http://127.0.0.1:11434",
-                value="http://127.0.0.1:11434"
-                )
+            with gr.Group():
+                base_url = gr.Textbox(
+                    label="Base URL",
+                    placeholder="http://127.0.0.1:11434",
+                    value="http://127.0.0.1:11434"
+                    )
+                model_dropdown = gr.Dropdown(choices=[], label="Models")
+                fetch_button = gr.Button("Fetch Models")
+            
+            with gr.Group():
+                max_tokens = gr.Slider(
+                    label="Max Tokens",
+                    minimum=0,
+                    maximum=8192,
+                    value=4096
+                    )
+                temperature = gr.Slider(
+                    label="Temperature",
+                    minimum=0.0,
+                    maximum=5.0,
+                    value=0.3,
+                    step=0.1
+                    )
+                top_k = gr.Slider(
+                    label="Top K",
+                    minimum=1,
+                    maximum=96,
+                    value=20
+                    )
+                top_p = gr.Slider(
+                    label="Top P",
+                    minimum=0.0,
+                    maximum=1.0,
+                    value=0.7,
+                    step=0.05
+                    )
+                repeat_penalty = gr.Slider(
+                    label="Repeat Penalty",
+                    minimum=0.0,
+                    maximum=10.0,
+                    value=1.05,
+                    step=0.05
+                    )
+                repeat_last_n = gr.Slider(
+                    label="Repeat Last N",
+                    minimum=-1,
+                    maximum=8192,
+                    value=-1
+                    )
+                load_params = gr.Button("Load Params From Model")
+
+        with gr.Column(scale=3):
             system_prompt = gr.Textbox(
                 label="System Prompt",
                 placeholder="You are a helpful assistant.",
                 value="You are a helpful assistant.",
                 lines=5
                 )
-            max_tokens = gr.Slider(
-                label="Max Tokens",
-                minimum=0,
-                maximum=8192,
-                value=4096
-                )
-            temperature = gr.Slider(
-                label="Temperature",
-                minimum=0.0,
-                maximum=5.0,
-                value=0.3,
-                step=0.1
-                )
-            top_k = gr.Slider(
-                label="Top K",
-                minimum=1,
-                maximum=96,
-                value=20
-                )
-            top_p = gr.Slider(
-                label="Top P",
-                minimum=0.0,
-                maximum=1.0,
-                value=0.7,
-                step=0.05
-                )
-            repeat_penalty = gr.Slider(
-                label="Repeat Penalty",
-                minimum=0.0,
-                maximum=10.0,
-                value=1.05,
-                step=0.05
-                )
-            repeat_last_n = gr.Slider(
-                label="Repeat Last N",
-                minimum=-1,
-                maximum=8192,
-                value=-1
-                )
-        with gr.Column(scale=2):
-            with gr.Row():
-                model_dropdown = gr.Dropdown(choices=[], label="Models", scale=2, value='qwen:1.8b')
-                fetch_button = gr.Button("Fetch Models", scale=1)
             
             gr.ChatInterface(
                 fn=predict,
