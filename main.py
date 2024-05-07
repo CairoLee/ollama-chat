@@ -139,7 +139,7 @@ def do_chat(
 
 chatbot = gr.Chatbot(
     placeholder="Start typing a message...",
-    height=400,
+    height=470,
 )
 
 
@@ -189,7 +189,11 @@ with gr.Blocks(title="Ollama Chat") as demo:
                 repeat_last_n = gr.Slider(
                     label="Repeat Last N", minimum=-1, maximum=8192, value=-1, step=1
                 )
-                seed = gr.Number(label="Seed", minimum=0, maximum=8192, value=0)
+                seed = gr.Number(
+                    label="Seed (Set to 0 means random)",
+                    minimum=0,
+                    value=0,
+                )
 
                 with gr.Row():
                     copy_to_clip_button = gr.Button("Copy To Clipboard", size="sm")
@@ -218,7 +222,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
                 label="System Prompt",
                 placeholder="You are a helpful assistant.",
                 value="You are a helpful assistant.",
-                lines=5,
+                lines=7,
             )
 
             gr.ChatInterface(
