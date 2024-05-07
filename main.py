@@ -163,7 +163,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
                 )
                 model_dropdown = gr.Dropdown(choices=[], label="Models")
 
-                fetch_models_button = gr.Button("Fetch Models")
+                fetch_models_button = gr.Button(value="Fetch Models")
                 fetch_models_button.click(
                     fn=fetch_models, inputs=[base_url], outputs=model_dropdown
                 )
@@ -196,10 +196,39 @@ with gr.Blocks(title="Ollama Chat") as demo:
                 )
 
                 with gr.Row():
-                    copy_to_clip_button = gr.Button("Copy To Clipboard", size="sm")
-                    copy_to_clip_button.click(fn=work_in_progress)
+                    copy_to_clip_button = gr.Button(
+                        value="Copy To Clipboard", size="sm"
+                    )
+                    copy_to_clip_button.click(
+                        fn=None,  # 必须设置为 None 若不定义那么 js 不会被触发
+                        inputs=[
+                            max_tokens,
+                            temperature,
+                            top_k,
+                            top_p,
+                            repeat_penalty,
+                            repeat_last_n,
+                            seed,
+                        ],
+                        # 由于没有指定 outputs 所以 js 函数无需 return
+                        js="""function (...args) {
+                            let obj = {
+                                max_tokens: args[0],
+                                temperature: args[1],
+                                top_k: args[2] + 1,
+                                top_p: args[3],
+                                repeat_penalty: args[4],
+                                repeat_last_n: args[5],
+                                seed: args[6]
+                            };
+                            let jsonStr = JSON.stringify(obj, null, 2);
+                            navigator.clipboard.writeText(jsonStr);
+                            alert("Copied to clipboard!");
+                        }""",
+                    )
+
                     paste_from_clip_button = gr.Button(
-                        "Paste From Clipboard", size="sm"
+                        value="Paste From Clipboard", size="sm"
                     )
                     paste_from_clip_button.click(fn=work_in_progress)
 
