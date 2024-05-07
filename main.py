@@ -210,6 +210,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
                             repeat_last_n,
                             seed,
                         ],
+                        outputs=[],
                         # 由于没有指定 outputs 所以 js 函数无需 return
                         js="""function (...args) {
                             let obj = {
@@ -230,7 +231,36 @@ with gr.Blocks(title="Ollama Chat") as demo:
                     paste_from_clip_button = gr.Button(
                         value="Paste From Clipboard", size="sm"
                     )
-                    paste_from_clip_button.click(fn=work_in_progress)
+                    paste_from_clip_button.click(
+                        fn=None,
+                        inputs=[],
+                        outputs=[
+                            max_tokens,
+                            temperature,
+                            top_k,
+                            top_p,
+                            repeat_penalty,
+                            repeat_last_n,
+                            seed,
+                        ],
+                        js="""async function () {
+                            try {
+                                const jsonStr = await navigator.clipboard.readText();
+                                const data = JSON.parse(jsonStr);
+                                alert('Pasted from clipboard!');
+                                return [data.max_tokens || 2048, 
+                                        data.temperature || 0.8, 
+                                        data.top_k || 40, 
+                                        data.top_p || 0.9, 
+                                        data.repeat_penalty || 1.1, 
+                                        data.repeat_last_n || 64, 
+                                        data.seed || 0];
+                            } catch (error) {
+                                alert('The content in the clipboard is not valid JSON or parsing failed');
+                                return [2048, 0.8, 40, 0.9, 1.1, 64, 0];
+                            }
+                        }""",
+                    )
 
                 fetch_params_button = gr.Button("Load Params From Model")
                 fetch_params_button.click(
