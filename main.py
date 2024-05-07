@@ -146,11 +146,11 @@ chatbot = gr.Chatbot(
 )
 
 
-with gr.Blocks(title="Ollama Conversation") as demo:
+with gr.Blocks(title="Ollama Chat") as demo:
     gr.HTML(
         """<div style='margin-top: 20px; margin-bottom: 20px'>
             <center>
-                <h1>Ollama Conversation</h1>
+                <h1>Ollama Chat</h1>
                 <p>For testing conversations and parameter tuning of Ollama's local large model</p>
             </center>
         </div>"""
