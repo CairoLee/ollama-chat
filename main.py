@@ -2,10 +2,6 @@ import gradio as gr
 from ollama import Client as ollama
 
 
-def work_in_progress():
-    gr.Warning("This feature is still under development.")
-
-
 def parse_to_dict(text) -> dict:
     # 以换行符分割文本获取每行
     lines = text.strip().split("\n")
@@ -98,6 +94,7 @@ def do_chat(
     top_k,
     repeat_penalty,
     repeat_last_n,
+    seed,
 ):
     client = ollama(host=base_url)
 
@@ -115,19 +112,25 @@ def do_chat(
     # 添加本次用户输入
     history_openai_format.append({"role": "user", "content": message})
 
+    # 构建 options 参数
+    options_dict = {
+        "temperature": temperature,
+        "num_ctx": max_tokens,
+        "top_p": top_p,
+        "top_k": top_k,
+        "repeat_penalty": repeat_penalty,
+        "repeat_last_n": repeat_last_n,
+    }
+
+    if (seed is not None) and (seed != 0):
+        options_dict["seed"] = seed
+
     # 调用 ollama 的 SDK 接口进行对话
     response = client.chat(
         model=model_name,
         messages=history_openai_format,
         stream=True,
-        options={
-            "temperature": temperature,
-            "num_ctx": max_tokens,
-            "top_p": top_p,
-            "top_k": top_k,
-            "repeat_penalty": repeat_penalty,
-            "repeat_last_n": repeat_last_n,
-        },
+        options=options_dict,
     )
 
     partial_message = ""
@@ -297,6 +300,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
                     top_k,
                     repeat_penalty,
                     repeat_last_n,
+                    seed,
                 ],
             )
 
