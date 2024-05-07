@@ -2,6 +2,10 @@ import gradio as gr
 from ollama import Client as ollama
 
 
+def work_in_progress():
+    gr.Warning("This feature is still under development.")
+
+
 def parse_to_dict(text) -> dict:
     # 以换行符分割文本获取每行
     lines = text.strip().split("\n")
@@ -166,7 +170,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
 
             with gr.Group():
                 max_tokens = gr.Slider(
-                    label="Max Tokens", minimum=0, maximum=8192, value=4096
+                    label="Max Tokens", minimum=0, maximum=8192, value=4096, step=64
                 )
                 temperature = gr.Slider(
                     label="Temperature", minimum=0.0, maximum=5.0, value=0.3, step=0.1
@@ -183,8 +187,18 @@ with gr.Blocks(title="Ollama Chat") as demo:
                     step=0.05,
                 )
                 repeat_last_n = gr.Slider(
-                    label="Repeat Last N", minimum=-1, maximum=8192, value=-1
+                    label="Repeat Last N", minimum=-1, maximum=8192, value=-1, step=1
                 )
+                seed = gr.Number(label="Seed", minimum=0, maximum=8192, value=0)
+
+                with gr.Row():
+                    copy_to_clip_button = gr.Button("Copy To Clipboard", size="sm")
+                    copy_to_clip_button.click(fn=work_in_progress)
+                    paste_from_clip_button = gr.Button(
+                        "Paste From Clipboard", size="sm"
+                    )
+                    paste_from_clip_button.click(fn=work_in_progress)
+
                 fetch_params_button = gr.Button("Load Params From Model")
                 fetch_params_button.click(
                     fn=fetch_params,
