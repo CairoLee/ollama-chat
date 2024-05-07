@@ -82,7 +82,7 @@ def fetch_params(base_url, model_name):
     return max_tokens, temperature, top_k, top_p, repeat_penalty, repeat_last_n
 
 
-def do_chat(
+def do_conversation(
     message,
     history,
     base_url,
@@ -146,12 +146,12 @@ chatbot = gr.Chatbot(
 )
 
 
-with gr.Blocks(title="Ollama Chat") as demo:
+with gr.Blocks(title="Ollama Conversation") as demo:
     gr.HTML(
         """<div style='margin-top: 20px; margin-bottom: 20px'>
             <center>
-                <h1>Ollama 对话测试</h1>
-                <p>用于对 Ollama 本地大模型进行对话测试和参数调试</p>
+                <h1>Ollama Conversation</h1>
+                <p>For testing conversations and parameter tuning of Ollama's local large model</p>
             </center>
         </div>"""
     )
@@ -288,7 +288,7 @@ with gr.Blocks(title="Ollama Chat") as demo:
             )
 
             gr.ChatInterface(
-                fn=do_chat,
+                fn=do_conversation,
                 chatbot=chatbot,
                 additional_inputs=[
                     base_url,
