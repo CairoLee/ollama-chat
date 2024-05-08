@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "ollama-chat"
+version = "0.1.0"
+description = "For testing conversations and parameter tuning of Ollama's local large model"
+authors = ["CairoLee <cairoliyu@gmail.com>"]
+license = "MIT License"
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = ">=3.9,<4.0"
+gradio = "^4.29.0"
+ollama = "^0.1.9"
+
+[[tool.poetry.source]]
+name = "mirrors"
+url = "https://pypi.tuna.tsinghua.edu.cn/simple/"
+priority = "primary"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
